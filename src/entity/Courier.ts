@@ -101,4 +101,21 @@ export class Courier {
       throw new Error("Failed to fetch couriers");
     }
   }
+  
+  async locationById(id: string): Promise<Partial<CourierEntity>>{
+    const courierCollections: Collection<CourierEntity> = this._db.collection('Courier');
+  try{
+    const objectId = new ObjectId(id);
+    const courier = await courierCollections.findOne({_id : objectId});
+    if(!courier){
+      throw new Error('Courier not found.');
+    }
+    return {latitude: courier.latitude, longitude: courier.longitude};
+  } catch(e: any){
+    console.error("Failed to fetch courier location:", e);
+    throw new Error("Failed to fetch courier location");
+  }
+  }
+
+  
 }

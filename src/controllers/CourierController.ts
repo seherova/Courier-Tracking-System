@@ -22,7 +22,7 @@ class CourierController {
     return courierInstance.save();
   };
 
-  public addCouriers = async (req: Request, res: Response) => {
+  addCouriers = async (req: Request, res: Response) => {
     console.log(req.body);
     const couriers = req.body as Courier[];
 
@@ -36,7 +36,7 @@ class CourierController {
     }
   };
 
-  public addCourier = async (req: Request, res: Response) => {
+  addCourier = async (req: Request, res: Response) => {
     try {
       await this._innerCourierAddFn(req.body);
       res.status(201).send("Courier added succesfully!");
@@ -81,7 +81,17 @@ class CourierController {
     }
   };
 
-  public getCourierLocation = (req: Request, res: Response): void => {};
+  getCourierLocation = async (req: Request, res: Response) => {
+    const {id} = req.params;
+
+    try{
+      const courier = new Courier();
+      const courierlocation = await courier.locationById(id);
+      res.status(200).json(courierlocation);
+    }catch(e: any){
+      res.status(400).send(e.message);
+    }
+  };
 }
 
 export const courierController = new CourierController();
